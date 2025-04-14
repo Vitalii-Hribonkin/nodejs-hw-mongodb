@@ -1,9 +1,17 @@
 import { createContact, deleteContact, getContact, getContactById, updateContact } from "../services/contact.js";
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
+import { contactSortFields } from "../db/Models/Contacts.js";
+
 
 export const getContactsController = async (req, res) => {
-    const data = await getContact();
+    
+    const paginationParams = parsePaginationParams(req.query);
+    const sortParams = parseSortParams(req.query, contactSortFields);
 
+    const data = await getContact({...paginationParams, ...sortParams});
+    
     res.json({
         status: 200,
         message: "Successfully find contacts",
@@ -34,6 +42,8 @@ export const createContactController = async (req, res) => {
         phoneNumber,
         isFavourite,
     });
+    
+    
 
     res.status(201).json({
         status: 201,
