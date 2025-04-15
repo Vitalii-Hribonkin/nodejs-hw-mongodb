@@ -1,11 +1,11 @@
 import { sortList } from "../constants/index.js";
 
 export const parseSortParams = ({ sortBy, sortOrder, sortFields }) => {
-    const parsedSortOrder = sortList && sortList.includes(sortOrder) ? sortOrder : sortList ? sortList[0] : 'asc'; 
-    const parsedSortBy = sortFields && sortFields.includes(sortBy) ? sortBy : '_id'; 
+    const isValidSortOrder = sortList?.includes(sortOrder);
+    const isValidSortBy = sortFields?.includes(sortBy);
 
     return {
-        sortBy: parsedSortBy,
-        sortOrder: parsedSortOrder,
+        sortBy: isValidSortBy ? sortBy : '_id',
+        sortOrder: isValidSortOrder ? sortOrder : (sortList?.[0] || 'asc'),
     };
 };

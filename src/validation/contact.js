@@ -30,7 +30,6 @@ export const contactAddSchema = Joi.object({
         .min(3)
         .max(20)
         .email()
-        .required()
         .messages({
             'string.email': `"email" must be a valid email address`,
             'string.min': `"email" should have at least {#limit} characters`,
