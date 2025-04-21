@@ -3,10 +3,10 @@ import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 
 import { UsersCollection } from '../db/Models/User.js';
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
 import { SessionsCollection } from '../db/Models/Session.js';
+import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
 
-// Реєстрація користувача
+// Регистрация пользователя
 export const registerUser = async (payload) => {
   const existingUser = await UsersCollection.findOne({ email: payload.email });
   if (existingUser) {
@@ -21,7 +21,7 @@ export const registerUser = async (payload) => {
   });
 };
 
-// Логін користувача
+// Логин пользователя
 export const loginUser = async ({ email, password }) => {
   const user = await UsersCollection.findOne({ email });
   if (!user) {
@@ -38,7 +38,7 @@ export const loginUser = async ({ email, password }) => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
-  await SessionsCollection.create({
+  const session = await SessionsCollection.create({
     userId: user._id,
     accessToken,
     refreshToken,
@@ -52,11 +52,12 @@ export const loginUser = async ({ email, password }) => {
     user: {
       _id: user._id,
       email: user.email,
-    }
+    },
+    session,
   };
 };
 
-// Оновлення сесії
+// Обновление сессии
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
@@ -86,15 +87,13 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, 'Refresh token expired');
   }
 
-  // Видалення старої сесії
   await SessionsCollection.deleteOne({ _id: session._id });
 
-  // Створення нової сесії
   const newSession = createSession();
 
   const createdSession = await SessionsCollection.create({
     userId: session.userId,
-    ...newSession
+    ...newSession,
   });
 
   return createdSession;

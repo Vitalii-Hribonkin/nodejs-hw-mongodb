@@ -1,31 +1,36 @@
-import { createContact, deleteContact, getContact, getContactById, updateContact } from "../services/contact.js";
+import { deleteContact, getContact, getContactById, updateContact } from "../services/contact.js";
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
-import { contactSortFields } from "../db/Models/Contacts.js";
+import ContactsCollection, { contactSortFields } from "../db/Models/Contacts.js";
 
-
+// Отримання всіх контактів користувача
 export const getContactsController = async (req, res) => {
-    
     const paginationParams = parsePaginationParams(req.query);
     const sortParams = parseSortParams({
-  ...req.query,
-  sortFields: contactSortFields,
-});
+        ...req.query,
+        sortFields: contactSortFields,
+    });
 
-    const data = await getContact({...paginationParams, ...sortParams});
-    
+    const data = await getContact({
+        ...paginationParams,
+        ...sortParams,
+        userId: req.user._id, // Вибірка тільки для поточного користувача
+    });
+
     res.json({
         status: 200,
-        message: "Successfully find contacts",
+        message: "Successfully found contacts",
         data,
     });
 };
 
+// Отримання контакту за ID
 export const getContactsByIdController = async (req, res) => {
     const { contactId } = req.params;
 
-    const data = await getContactById(contactId);
+    // Шукаємо контакт тільки для поточного користувача
+    const data = await getContactById(contactId, req.user._id);
 
     if (!data) {
         throw createHttpError(404, 'Contact not found');
@@ -33,31 +38,34 @@ export const getContactsByIdController = async (req, res) => {
 
     res.json({
         status: 200,
-        message: `Successfully find contact by id=${contactId}`,
+        message: `Successfully found contact by id=${contactId}`,
         data,
     });
 };
 
-export const createContactController = async (req, res) => {
-    const { name, phoneNumber, isFavourite } = req.body;
-    const contact = await createContact({
-        name,
-        phoneNumber,
-        isFavourite,
+// Створення нового контакту
+export const createContactController = async (req, res, next) => {
+  try {
+    const { name, email, phone } = req.body;
+    const contact = await ContactsCollection.create({
+      name,
+      email,
+      phone,
+      userId: req.user._id, // Прив'язка контакту до користувача
     });
-    
-    
 
-    res.status(201).json({
-        status: 201,
-        message: `Successfully created a contact!`,
-        data: contact,
-    });
+    res.status(201).json(contact);
+  } catch (error) {
+    next(error);
+  }
 };
 
+// Видалення контакту
 export const deleteContactController = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await deleteContact(contactId);
+
+    // Шукаємо контакт тільки для поточного користувача
+    const contact = await deleteContact(contactId, req.user._id);
 
     if (!contact) {
         throw createHttpError(404, 'Contact not found');
@@ -66,11 +74,14 @@ export const deleteContactController = async (req, res) => {
     res.status(204).send();
 };
 
+// Оновлення чи створення контакту
 export const upsertContactController = async (req, res) => {
     const { contactId } = req.params;
 
+    // Шукаємо контакт тільки для поточного користувача
     const result = await updateContact(contactId, req.body, {
         upsert: true,
+        userId: req.user._id, // Перевірка належності контакту
     });
 
     if (!result) {
@@ -86,9 +97,14 @@ export const upsertContactController = async (req, res) => {
     });
 };
 
+// Часткове оновлення контакту
 export const patchContactController = async (req, res) => {
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+
+    // Шукаємо контакт тільки для поточного користувача
+    const result = await updateContact(contactId, req.body, {
+        userId: req.user._id, // Перевірка належності контакту
+    });
 
     if (!result) {
         throw createHttpError(404, `Contact not found`);

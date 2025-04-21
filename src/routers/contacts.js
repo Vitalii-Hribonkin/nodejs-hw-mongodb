@@ -5,10 +5,13 @@ import { ctrlWrapper } from "../utils/ctrlWrappers.js";
 import { validateBody } from "../utils/validateBody.js";
 import { contactAddSchema, contactUpdateSchema } from "../validation/contact.js";
 import { isValidId } from "../midllewares/isValidId.js";
+import { authenticate } from "../midllewares/authenticate.js";
 
 
 const contactRouter = Router();
 //#region-GET
+contactRouter.use(authenticate);
+
 contactRouter.get("/contacts", ctrlWrapper(getContactsController));
 
 contactRouter.get('/contacts/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
