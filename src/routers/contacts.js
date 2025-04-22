@@ -12,24 +12,24 @@ const contactRouter = Router();
 //#region-GET
 contactRouter.use(authenticate);
 
-contactRouter.get("/contacts", ctrlWrapper(getContactsController));
+contactRouter.get("/", ctrlWrapper(getContactsController));
 
-contactRouter.get('/contacts/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
+contactRouter.get('/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
 //#endregion-GET
 
 //#region-POST
-contactRouter.post('/contacts', validateBody(contactAddSchema),ctrlWrapper(createContactController));
+contactRouter.post('/', validateBody(contactAddSchema),ctrlWrapper(createContactController));
 //#endregion-POST
 
 //#region-DELETE
-contactRouter.delete('/contacts/:contactId', isValidId, ctrlWrapper(deleteContactController));
+contactRouter.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
 //#endregion-DELETE
 
 //#region-UPSERT
-contactRouter.put('/contacts/:contactId', isValidId, validateBody(contactAddSchema),ctrlWrapper(upsertContactController));
+contactRouter.put('/:contactId', isValidId, validateBody(contactAddSchema),ctrlWrapper(upsertContactController));
 //#endregion-UPSERT
 
 //#region-PATCH
-contactRouter.patch('/contacts/:contactId', isValidId, validateBody(contactUpdateSchema),ctrlWrapper(patchContactController));
+contactRouter.patch('/:contactId', isValidId, validateBody(contactUpdateSchema),ctrlWrapper(patchContactController));
 //#endregion-PATCH
 export default contactRouter;

@@ -46,11 +46,11 @@ export const getContactsByIdController = async (req, res) => {
 // Створення нового контакту
 export const createContactController = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phoneNumber } = req.body;
     const contact = await ContactsCollection.create({
       name,
       email,
-      phone,
+      phoneNumber,
       userId: req.user._id, // Прив'язка контакту до користувача
     });
 

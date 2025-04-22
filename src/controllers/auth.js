@@ -25,9 +25,8 @@ export const loginUserController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const { accessToken, refreshToken, user, session } = await loginUser({ email, password });
+    const { accessToken, refreshToken, session } = await loginUser({ email, password });
 
-    // Устанавливаем куки
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -45,7 +44,6 @@ export const loginUserController = async (req, res, next) => {
       message: 'Successfully logged in a user!',
       data: {
         accessToken,
-        user,
       },
     });
   } catch (error) {
