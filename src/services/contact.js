@@ -2,7 +2,7 @@ import { sortList } from "../constants/index.js";
 import ContactsCollection from "../db/Models/Contacts.js";
 import { calculatePaginationData } from "../utils/calculatePaginationData.js";
 
-
+// Получение контактов с пагинацией и сортировкой
 export const getContact = async ({ userId, page = 1, perPage = 10, sortBy = '_id', sortOrder = sortList[0] }) => {
   const skip = (page - 1) * perPage;
   const filter = { userId };
@@ -24,30 +24,31 @@ export const getContact = async ({ userId, page = 1, perPage = 10, sortBy = '_id
   };
 };
 
-
+// Получение контакта по ID
 export const getContactById = async (userId, contactId) => {
-  return ContactsCollection.findOne({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOne({ _id: contactId, userId });
+  return contact;
 };
 
-
+// Создание нового контакта
 export const createContact = async (userId, payload) => {
   const contact = await ContactsCollection.create({ ...payload, userId });
   return contact;
 };
 
-
+// Удаление контакта
 export const deleteContact = async (userId, contactId) => {
-  return ContactsCollection.findOneAndDelete({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOneAndDelete({ _id: contactId, userId });
+  return contact;
 };
 
-
-
+// Обновление контакта
 export const updateContact = async (userId, contactId, payload, options = {}) => {
   const updatedContact = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
     {
-      new: true, // чтобы вернуть обновленный документ
+      new: true, // возвращает обновленный документ
       ...options,
     }
   );
