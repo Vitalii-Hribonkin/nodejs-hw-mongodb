@@ -43,20 +43,19 @@ export const deleteContact = async (userId, contactId) => {
 
 
 export const updateContact = async (userId, contactId, payload, options = {}) => {
-  const rawResult = await ContactsCollection.findOneAndUpdate(
+  const updatedContact = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
     {
-      new: true,
-      includeResultMetadata: true,
+      new: true, // чтобы вернуть обновленный документ
       ...options,
     }
   );
 
-  if (!rawResult || !rawResult.value) return null;
+  if (!updatedContact) return null;
 
   return {
-    contact: rawResult.value,
-    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+    contact: updatedContact,
+    isNew: false, // Mongoose findOneAndUpdate не поддерживает upsert metadata напрямую
   };
 };
