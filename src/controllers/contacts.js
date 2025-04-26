@@ -74,17 +74,14 @@ export const createContactController = async (req, res, next) => {
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
 
+  // Шукаємо контакт тільки для поточного користувача
   const contact = await deleteContact(req.user._id, contactId);
 
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
   }
 
-  res.status(200).json({
-    status: 200,
-    message: 'Contact successfully deleted',
-    data: contact,
-  });
+  res.status(204).send();
 };
 
 // Оновлення або створення контакту (upsert)
