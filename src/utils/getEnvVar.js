@@ -1,11 +1,17 @@
 import "dotenv/config";
 
 export const getEnvVar = (name, defaultName) => {
-    const value = process.env[name];
+  console.log(`Looking for: ${name}`);
+  const value = process.env[name];
 
-    if (value) return value;
+  if (!value) {
+    console.error(`Missing environment variable: ${name}`);
+  }
 
-    if (defaultName) return defaultName;
+  if (value) return value;
 
-    throw new Error(`Cannot find process.env[${name}]`);
+  if (defaultName) return defaultName;
+
+  throw new Error(`Cannot find process.env[${name}]`);
 };
+

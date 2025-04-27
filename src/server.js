@@ -1,14 +1,14 @@
 import express from "express";
 import cors from "cors";
 import pino from "pino-http";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser"; // Подключаем cookie-parser
 import { errorHandler } from "./midllewares/errorHandler.js";
 import { notFoundHandler } from "./midllewares/notFoundHandler.js"; 
 import router from "./routers/index.js";
+import dotenv from "dotenv";
 
 dotenv.config();
-
+console.log("JWT_SECRET:", process.env.JWT_SECRET); 
 export const setupServer = () => {
   const app = express();
 
