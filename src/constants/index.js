@@ -26,7 +26,7 @@ export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
 
 
 export const CLOUDINARY = {
-  CLOUD_NAME: 'CLOUD_NAME',
-  API_KEY: 'API_KEY',
-  API_SECRET: 'API_SECRET',
+  CLOUD_NAME: 'CLOUD_NAME',   // Имя облака, которое вы храните в .env
+  API_KEY: 'CLOUD_API_KEY',   // Ваш API ключ
+  API_SECRET: 'CLOUD_API_SECRET', // Ваш API секрет
 };
