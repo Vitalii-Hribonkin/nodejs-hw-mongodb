@@ -1,7 +1,6 @@
 import "dotenv/config";
 
 export const getEnvVar = (name, defaultName) => {
-  console.log(`Looking for: ${name}`);
   const value = process.env[name];
 
   if (!value) {

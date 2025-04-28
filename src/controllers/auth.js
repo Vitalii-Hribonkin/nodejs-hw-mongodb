@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { loginUser, logoutUser, refreshUsersSession, registerUser, requestResetToken } from '../services/auth.js';
+import { loginUser, logoutUser, refreshUsersSession, registerUser, requestResetToken, resetPassword } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 
 // Регистрация пользователя
@@ -105,6 +105,15 @@ export const requestResetEmailController = async (req, res) => {
   await requestResetToken(req.body.email);
   res.json({
     message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password was successfully reset!',
     status: 200,
     data: {},
   });

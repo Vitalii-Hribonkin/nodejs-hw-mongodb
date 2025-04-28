@@ -1,35 +1,75 @@
+// src/routers/contacts.js
 
 import { Router } from "express";
-import { createContactController, deleteContactController, getContactsByIdController, getContactsController, patchContactController, upsertContactController } from "../controllers/contacts.js";
+import { 
+  createContactController, 
+  deleteContactController, 
+  getContactsByIdController, 
+  getContactsController, 
+  patchContactController, 
+  upsertContactController 
+} from "../controllers/contacts.js";
 import { ctrlWrapper } from "../utils/ctrlWrappers.js";
 import { validateBody } from "../utils/validateBody.js";
 import { contactAddSchema, contactUpdateSchema } from "../validation/contact.js";
 import { isValidId } from "../midllewares/isValidId.js";
 import { authenticate } from "../midllewares/authenticate.js";
-
+import { upload } from "../midllewares/multer.js";
 
 const contactRouter = Router();
-//#region-GET
-contactRouter.use(authenticate);
 
-contactRouter.get("/", ctrlWrapper(getContactsController));
+//#region - Middleware
+contactRouter.use(authenticate); // Защищаем роуты аутентификацией
+//#endregion
 
-contactRouter.get('/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
-//#endregion-GET
+//#region - GET
+contactRouter.get(
+  "/", 
+  ctrlWrapper(getContactsController)  // Получение всех контактов
+);
 
-//#region-POST
-contactRouter.post('/', validateBody(contactAddSchema),ctrlWrapper(createContactController));
-//#endregion-POST
+contactRouter.get(
+  "/:contactId", 
+  isValidId, 
+  ctrlWrapper(getContactsByIdController)  // Получение контакта по ID
+);
+//#endregion
 
-//#region-DELETE
-contactRouter.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
-//#endregion-DELETE
+//#region - POST
+contactRouter.post(
+  "/", 
+  upload.single('photo'), // Загрузка одного файла с полем 'photo'
+  validateBody(contactAddSchema),  // Валидация данных для нового контакта
+  ctrlWrapper(createContactController)  // Создание нового контакта
+);
+//#endregion
 
-//#region-UPSERT
-contactRouter.put('/:contactId', isValidId, validateBody(contactAddSchema),ctrlWrapper(upsertContactController));
-//#endregion-UPSERT
+//#region - PUT (Upsert)
+contactRouter.put(
+  "/:contactId", 
+  isValidId, 
+  upload.single('photo'), // Загрузка одного файла с полем 'photo'
+  validateBody(contactAddSchema),  // Валидация данных для обновления контакта
+  ctrlWrapper(upsertContactController)  // Обновление или создание контакта
+);
+//#endregion
 
-//#region-PATCH
-contactRouter.patch('/:contactId', isValidId, validateBody(contactUpdateSchema),ctrlWrapper(patchContactController));
-//#endregion-PATCH
+//#region - PATCH
+contactRouter.patch(
+  "/:contactId", 
+  isValidId, 
+  upload.single('photo'), // Загрузка одного файла с полем 'photo'
+  validateBody(contactUpdateSchema),  // Валидация данных для частичного обновления контакта
+  ctrlWrapper(patchContactController)  // Частичное обновление контакта
+);
+//#endregion
+
+//#region - DELETE
+contactRouter.delete(
+  "/:contactId", 
+  isValidId, 
+  ctrlWrapper(deleteContactController)  // Удаление контакта по ID
+);
+//#endregion
+
 export default contactRouter;

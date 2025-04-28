@@ -6,6 +6,7 @@ import { errorHandler } from "./midllewares/errorHandler.js";
 import { notFoundHandler } from "./midllewares/notFoundHandler.js"; 
 import router from "./routers/index.js";
 import dotenv from "dotenv";
+import { UPLOAD_DIR } from "./constants/index.js";
 
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET); 
@@ -35,6 +36,9 @@ export const setupServer = () => {
 
   // Обработка ошибок
   app.use(errorHandler);
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
+
 
   const port = Number(process.env.PORT) || 3000;
   app.listen(port, () => console.log(`Server running on port ${port}`));

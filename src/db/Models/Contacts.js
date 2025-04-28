@@ -29,6 +29,7 @@ const contactSchema = new Schema(
       ref: 'users',
       required: true, // Контакт повинен мати власника
     },
+    photo: { type: String },
   },
   {
     timestamps: true,
