@@ -61,7 +61,21 @@ export const getContactsByIdController = async (req, res) => {
 // Створення нового контакту
 export const createContactController = async (req, res, next) => {
   try {
-    const contact = await createContact(req.user._id, req.body);
+    const photo = req.file;
+    let photoUrl;
+
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    }
+
+    const contact = await createContact(req.user._id, {
+      ...req.body,
+      photo: photoUrl,
+    });
 
     res.status(201).json({
       status: 201,
@@ -88,74 +102,80 @@ export const deleteContactController = async (req, res) => {
 };
 
 // Оновлення або створення контакту (upsert)
-export const upsertContactController = async (req, res) => {
-  const { contactId } = req.params;
+export const upsertContactController = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const photo = req.file;
 
-  const result = await updateContact(req.user._id, contactId, req.body, {
-    upsert: true,
-  });
+    let photoUrl;
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    }
 
-  if (!result) {
-    throw createHttpError(404, 'Contact not found');
+    const result = await updateContact(
+      req.user._id,
+      contactId,
+      {
+        ...req.body,
+        ...(photoUrl && { photo: photoUrl }),
+      },
+      { upsert: true }
+    );
+
+    if (!result) {
+      throw createHttpError(404, 'Contact not found');
+    }
+
+    const status = result.isNew ? 201 : 200;
+
+    res.status(status).json({
+      status,
+      message: `Successfully upserted a contact!`,
+      data: result.contact,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const status = result.isNew ? 201 : 200;
-
-  res.status(status).json({
-    status,
-    message: `Successfully upserted a contact!`,
-    data: result.contact,
-  });
 };
 
 // Часткове оновлення контакту
-export const patchContactController = async (req, res) => {
-  const { contactId } = req.params;
+export const patchContactController = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const photo = req.file;
 
-  const result = await updateContact(req.user._id, contactId, req.body);
-
-  if (!result) {
-    throw createHttpError(404, `Contact not found`);
-  }
-
-  res.status(200).json({
-    status: 200,
-    message: `Successfully patched a contact!`,
-    data: result.contact,
-  });
-};
-
-
-export const patchStudentController = async (req, res, next) => {
-  const { studentId } = req.params;
-  const photo = req.file;
-
-  let photoUrl;
-
-  if (photo) {
-    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-      photoUrl = await saveFileToCloudinary(photo);
-    } else {
-      photoUrl = await saveFileToUploadDir(photo);
+    let photoUrl;
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
     }
+
+    const result = await updateContact(req.user._id, contactId, {
+      ...req.body,
+      ...(photoUrl && { photo: photoUrl }),
+    });
+
+    if (!result) {
+      throw createHttpError(404, 'Contact not found');
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: `Successfully patched a contact!`,
+      data: result.contact,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const result = await updateContact(studentId, {
-    ...req.body,
-    photo: photoUrl,
-  });
-
-  if (!result) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
-  }
-
-  res.json({
-    status: 200,
-    message: `Successfully patched a contact!`,
-    data: result.student,
-  });
 };
+
 
 
 
