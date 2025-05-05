@@ -7,6 +7,7 @@ import { notFoundHandler } from "./midllewares/notFoundHandler.js";
 import router from "./routers/index.js";
 import dotenv from "dotenv";
 import { UPLOAD_DIR } from "./constants/index.js";
+import { swaggerDocs } from "./midllewares/swaggerDocs.js";
 
 dotenv.config();
 console.log("JWT_SECRET:", process.env.JWT_SECRET); 
@@ -38,6 +39,7 @@ export const setupServer = () => {
   app.use(errorHandler);
 
   app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/api-docs', swaggerDocs());
 
 
   const port = Number(process.env.PORT) || 3000;

@@ -30,3 +30,6 @@ export const CLOUDINARY = {
   API_KEY: 'CLOUD_API_KEY',   // Ваш API ключ
   API_SECRET: 'CLOUD_API_SECRET', // Ваш API секрет
 };
+
+
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');
