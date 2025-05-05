@@ -32,15 +32,15 @@ export const setupServer = () => {
   // Маршруты
   app.use(router);
 
-  // Обработка не найденных маршрутов
-  app.use('*', notFoundHandler);
-
+  
   // Обработка ошибок
   app.use(errorHandler);
-
+  
   app.use('/uploads', express.static(UPLOAD_DIR));
   app.use('/api-docs', swaggerDocs());
-
+  
+  // Обработка не найденных маршрутов
+  app.use('*', notFoundHandler);
 
   const port = Number(process.env.PORT) || 3000;
   app.listen(port, () => console.log(`Server running on port ${port}`));
