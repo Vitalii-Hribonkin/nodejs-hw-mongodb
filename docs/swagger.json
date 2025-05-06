@@ -10,12 +10,8 @@
   },
   "servers": [
   {
-    "url": "http://Contacts-App",
+    "url": "https://hw7-swagger-d2jm.onrender.com",
     "description": "Contacts App"
-  },
-  {
-    "url": "https://example.com/api/v1",
-    "description": "Production server"
   }
 ],
   "tags": [
