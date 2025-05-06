@@ -38,3 +38,16 @@ responses:
     $ref: '../../../components/responses/401.yaml'
   '404':
     description: Contact not found
+  '400':
+    description: Invalid request body or missing required fields
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Invalid data provided or required fields missing

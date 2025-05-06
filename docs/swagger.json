@@ -10,8 +10,8 @@
   },
   "servers": [
   {
-    "url": "http://localhost:3000",
-    "description": "Local server"
+    "url": "http://Contacts-App",
+    "description": "Contacts App"
   },
   {
     "url": "https://example.com/api/v1",

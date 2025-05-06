@@ -2,34 +2,51 @@ openapi: 3.1.0
 info:
   version: 1.0.0
   title: Contacts app
+  description: This is a documentation of contacts app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: >
-    This is a documentation of contacts app
+servers:
+  - url: https://your-deployed-server.com/api/v1
+    description: Production server
 tags:
   - name: Contacts
     description: Operations about contacts.
-  - name: Auth
-    description: Auth operations.
-servers:
-  - url: http://localhost:3000
-  - url: https://example.com/api/v1
 paths:
   /contacts:
     get:
       $ref: ../swagger/paths/contacts/get.yaml
+      security:
+        - bearerAuth: [] # security будет сохраняться в API, но не отображаться в документации
     post:
       $ref: ../swagger/paths/contacts/post.yaml
+      security:
+        - bearerAuth: [] # тоже самое для других операций
   /contacts/{id}:
     get:
       $ref: ../swagger/paths/contacts/{id}/get.yaml
+      security:
+        - bearerAuth: []
     patch:
       $ref: ../swagger/paths/contacts/{id}/patch.yaml
+      security:
+        - bearerAuth: []
     delete:
       $ref: ../swagger/paths/contacts/{id}/delete.yaml
+      security:
+        - bearerAuth: []
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+  schemas:
+    contact:
+      $ref: ../swagger/components/schemas/contact.yaml
+  responses:
+    400:
+      $ref: ../swagger/components/responses/400.yaml
+    401:
+      $ref: ../swagger/components/responses/401.yaml
+    404:
+      $ref: ../swagger/components/responses/404.yaml

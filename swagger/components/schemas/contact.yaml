@@ -2,21 +2,37 @@ type: object
 required:
   - _id
   - name
-  - email
-  - phone
+  - phoneNumber
+  - contactType
+  - createdAt
+  - updatedAt
 properties:
   _id:
     type: string
-    example: 60af884ac45d3c001f1f5c7e
+    example: '67e8225c5f7e7f491380f642'
   name:
     type: string
-    example: John Doe
+    example: 'Anna Kovalenko'
+  phoneNumber:
+    type: string
+    example: '+380000000006'
   email:
-    type: string
-    example: john@example.com
-  phone:
-    type: string
-    example: '+1234567890'
-  favorite:
+    type: [string, 'null']
+    example: null
+  isFavourite:
     type: boolean
     example: false
+  contactType:
+    type: string
+    enum:
+      - home
+      - personal
+    example: 'home'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2024-05-08T16:12:14.954182'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2024-05-08T16:12:14.954184'
