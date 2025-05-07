@@ -15,18 +15,25 @@ parameters:
 requestBody:
   required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
         type: object
         properties:
           name:
             type: string
           email:
+            type: [string, 'null']
+            example: null
+          phoneNumber:
             type: string
-          phone:
-            type: string
-          favorite:
+          isFavourite:
             type: boolean
+          contactType:
+            type: string
+            enum: [home, personal]
+          avatar:
+            type: string
+            format: binary
 responses:
   '200':
     description: Contact updated successfully
@@ -34,10 +41,6 @@ responses:
       application/json:
         schema:
           $ref: '../../../components/schemas/contact.yaml'
-  '401':
-    $ref: '../../../components/responses/401.yaml'
-  '404':
-    description: Contact not found
   '400':
     description: Invalid request body or missing required fields
     content:
@@ -51,3 +54,7 @@ responses:
             message:
               type: string
               example: Invalid data provided or required fields missing
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    description: Contact not found

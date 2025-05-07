@@ -13,15 +13,25 @@ requestBody:
         type: object
         required:
           - name
-          - email
-          - phone
+          - phoneNumber
+          - contactType
         properties:
           name:
             type: string
+            example: 'Anna Kovalenko'
+          phoneNumber:
+            type: string
+            example: '+380000000006'
           email:
+            type: [string, 'null']
+            example: null
+          isFavourite:
+            type: boolean
+            example: false
+          contactType:
             type: string
-          phone:
-            type: string
+            enum: [home, personal]
+            example: 'home'
           avatar:
             type: string
             format: binary

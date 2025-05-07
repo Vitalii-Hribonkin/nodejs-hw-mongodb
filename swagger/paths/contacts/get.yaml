@@ -2,34 +2,38 @@ tags:
   - Contacts
 summary: Get all contacts
 operationId: getAllContacts
-description: Retrieve all contacts with optional filters, pagination, and sorting
+description: Retrieve all contacts with pagination and sorting
 security:
   - bearerAuth: []
 parameters:
   - in: query
-    name: name
-    schema:
-      type: string
-  - in: query
-    name: favorite
-    schema:
-      type: boolean
-  - in: query
     name: page
     schema:
       type: integer
+      minimum: 1
+      example: 1
+    description: Page number for pagination
   - in: query
     name: limit
     schema:
       type: integer
+      minimum: 1
+      example: 10
+    description: Number of contacts per page
   - in: query
     name: sortBy
     schema:
       type: string
+      enum: [name, email, createdAt]
+      example: name
+    description: Field to sort by
   - in: query
-    name: sortByDesc
+    name: sortOrder
     schema:
       type: string
+      enum: [asc, desc]
+      example: asc
+    description: Sorting order - ascending or descending
 responses:
   '200':
     description: A list of contacts
