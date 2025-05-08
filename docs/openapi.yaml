@@ -9,6 +9,8 @@ info:
 servers:
   - url: https://hw7-swagger-okmt.onrender.com
     description: Production server
+  - url: http://localhost:3000
+    description: Local development server
 tags:
   - name: Contacts
     description: Operations about contacts.
