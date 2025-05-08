@@ -7,7 +7,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: https://hw7-swagger-d2jm.onrender.com
+  - url: https://hw7-swagger-okmt.onrender.com
     description: Production server
 tags:
   - name: Contacts
