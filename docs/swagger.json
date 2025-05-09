@@ -52,7 +52,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "perPage",
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -158,7 +158,7 @@
                     ],
                     "example": "home"
                   },
-                  "avatar": {
+                  "photo": {
                     "type": "string",
                     "format": "binary"
                   }
@@ -241,6 +241,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -302,7 +305,7 @@
                       "personal"
                     ]
                   },
-                  "avatar": {
+                  "photo": {
                     "type": "string",
                     "format": "binary"
                   }
@@ -376,6 +379,9 @@
           "204": {
             "description": "Contact deleted successfully"
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           },
@@ -402,7 +408,9 @@
           "phoneNumber",
           "contactType",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "userId",
+          "photo"
         ],
         "properties": {
           "_id": {
@@ -435,6 +443,14 @@
               "personal"
             ],
             "example": "home"
+          },
+          "photo": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/.../photo.jpg"
+          },
+          "userId": {
+            "type": "string",
+            "example": "665c0cfc6a2d1a001ef4e29c"
           },
           "createdAt": {
             "type": "string",

@@ -14,7 +14,7 @@ parameters:
       example: 1
     description: Page number for pagination
   - in: query
-    name: limit
+    name: perPage
     schema:
       type: integer
       minimum: 1

@@ -31,7 +31,7 @@ requestBody:
           contactType:
             type: string
             enum: [home, personal]
-          avatar:
+          photo:
             type: string
             format: binary
 responses:

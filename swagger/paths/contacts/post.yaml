@@ -32,7 +32,7 @@ requestBody:
             type: string
             enum: [home, personal]
             example: 'home'
-          avatar:
+          photo:
             type: string
             format: binary
 responses:

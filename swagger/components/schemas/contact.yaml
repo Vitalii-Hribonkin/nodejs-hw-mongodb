@@ -6,6 +6,8 @@ required:
   - contactType
   - createdAt
   - updatedAt
+  - userId # ✅ Додано
+  - photo # ✅ Додано
 properties:
   _id:
     type: string
@@ -28,6 +30,12 @@ properties:
       - home
       - personal
     example: 'home'
+  photo:
+    type: string
+    example: 'https://res.cloudinary.com/.../photo.jpg' # або локальний шлях, якщо не CDN
+  userId:
+    type: string
+    example: '665c0cfc6a2d1a001ef4e29c'
   createdAt:
     type: string
     format: date-time
