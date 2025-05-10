@@ -23,8 +23,9 @@ requestBody:
             type: string
             example: '+380000000006'
           email:
-            type: [string, 'null']
-            example: null
+            oneOf:
+              - type: string
+              - type: 'null'
           isFavourite:
             type: boolean
             example: false

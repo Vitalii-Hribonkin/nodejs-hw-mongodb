@@ -22,7 +22,9 @@ requestBody:
           name:
             type: string
           email:
-            type: [string, 'null']
+            oneOf:
+              - type: string
+              - type: 'null'
             example: null
           phoneNumber:
             type: string
@@ -42,7 +44,7 @@ responses:
         schema:
           $ref: '../../../components/schemas/contact.yaml'
   '400':
-    description: Invalid request body or missing required fields
+    description: Invalid ID format or invalid request body
     content:
       application/json:
         schema:
@@ -53,8 +55,8 @@ responses:
               example: 400
             message:
               type: string
-              example: Invalid data provided or required fields missing
+              example: Invalid contact ID or request body
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':
-    description: Contact not found
+    $ref: '../../../components/responses/404.yaml'

@@ -140,11 +140,14 @@
                     "example": "+380000000006"
                   },
                   "email": {
-                    "type": [
-                      "string",
-                      "null"
-                    ],
-                    "example": null
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "isFavourite": {
                     "type": "boolean",
@@ -286,9 +289,13 @@
                     "type": "string"
                   },
                   "email": {
-                    "type": [
-                      "string",
-                      "null"
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
                     ],
                     "example": null
                   },
@@ -326,7 +333,7 @@
             }
           },
           "400": {
-            "description": "Invalid request body or missing required fields",
+            "description": "Invalid ID format or invalid request body",
             "content": {
               "application/json": {
                 "schema": {
@@ -338,7 +345,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Invalid data provided or required fields missing"
+                      "example": "Invalid contact ID or request body"
                     }
                   }
                 }
@@ -349,7 +356,7 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "description": "Contact not found"
+            "$ref": "#/components/responses/404"
           }
         }
       },
@@ -409,8 +416,7 @@
           "contactType",
           "createdAt",
           "updatedAt",
-          "userId",
-          "photo"
+          "userId"
         ],
         "properties": {
           "_id": {
@@ -426,11 +432,8 @@
             "example": "+380000000006"
           },
           "email": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "example": null
+            "type": "string",
+            "example": "user@example.com"
           },
           "isFavourite": {
             "type": "boolean",
