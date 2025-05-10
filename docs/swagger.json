@@ -140,14 +140,8 @@
                     "example": "+380000000006"
                   },
                   "email": {
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
+                    "type": "string",
+                    "example": "anna.kovalenko@example.com"
                   },
                   "isFavourite": {
                     "type": "boolean",
@@ -289,15 +283,8 @@
                     "type": "string"
                   },
                   "email": {
-                    "oneOf": [
-                      {
-                        "type": "string"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ],
-                    "example": null
+                    "type": "string",
+                    "example": "anna.kovalenko@example.com"
                   },
                   "phoneNumber": {
                     "type": "string"

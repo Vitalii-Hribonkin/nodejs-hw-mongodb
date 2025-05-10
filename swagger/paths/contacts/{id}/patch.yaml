@@ -22,10 +22,8 @@ requestBody:
           name:
             type: string
           email:
-            oneOf:
-              - type: string
-              - type: 'null'
-            example: null
+            type: string # Прибираємо можливість null
+            example: 'anna.kovalenko@example.com'
           phoneNumber:
             type: string
           isFavourite:
